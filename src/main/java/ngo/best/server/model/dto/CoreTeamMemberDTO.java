@@ -6,24 +6,17 @@ package ngo.best.server.model.dto;
 
 public class CoreTeamMemberDTO {
 
-    private Long userId;
-
+    private EventUserDTO event;
+    private UpdateUserDTO userEvent;
     private String position;
 
     public CoreTeamMemberDTO() {
     }
 
-    public CoreTeamMemberDTO(Long userId, String position) {
-        this.userId = userId;
+    public CoreTeamMemberDTO(EventUserDTO event, UpdateUserDTO userEvent, String position) {
+        this.event = event;
+        this.userEvent = userEvent;
         this.position = position;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getPosition() {
@@ -32,5 +25,21 @@ public class CoreTeamMemberDTO {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public EventUserDTO getEvent() {
+        return event;
+    }
+
+    public void setEvent(EventUserDTO event) {
+        this.event = event;
+    }
+
+    public UpdateUserDTO getUserEvent() {
+        return userEvent;
+    }
+
+    public void setUserEvent(UpdateUserDTO userEvent) {
+        this.userEvent = userEvent;
     }
 }

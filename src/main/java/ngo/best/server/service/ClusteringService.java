@@ -6,20 +6,18 @@ import ngo.best.server.clustering.kmeans.*;
 import ngo.best.server.clustering.knn.KNN;
 import ngo.best.server.model.dto.UserNotificationDTO;
 import ngo.best.server.model.entity.*;
-import ngo.best.server.repository.CategoryRepository;
-import ngo.best.server.repository.CentroidCategoryRepository;
-import ngo.best.server.repository.CentroidRepository;
-import ngo.best.server.repository.UserRepository;
+import ngo.best.server.repository.*;
+import ngo.best.server.utils.DTOConverter;
 import ngo.best.server.utils.DatasetClusteringConverter;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 /**
  * @author Ioana
@@ -34,14 +32,16 @@ public class ClusteringService {
     private final CategoryRepository categoryRepository;
     private final CentroidRepository centroidRepository;
     private final CentroidCategoryRepository centroidCategoryRepository;
-//    private static final ObjectMapper mapper = new ObjectMapper();
+    private final SubscriptionRepository subscriptionRepository;
 
     public ClusteringService(UserRepository userRepository, CategoryRepository categoryRepository,
-                             CentroidRepository centroidRepository, CentroidCategoryRepository centroidCategoryRepository) {
+                             CentroidRepository centroidRepository, CentroidCategoryRepository centroidCategoryRepository,
+                             SubscriptionRepository subscriptionRepository) {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.centroidRepository = centroidRepository;
         this.centroidCategoryRepository = centroidCategoryRepository;
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     /**
@@ -53,7 +53,6 @@ public class ClusteringService {
     public void generateClusters(List<User> users) {
 
         AtomicBoolean generateNewClusters = new AtomicBoolean(true);
-
         centroidRepository.findAll().forEach(centroid -> {
             Period period = Period.between(LocalDateTime.now().toLocalDate(), centroid.getLocalDateTime().toLocalDate());
             if(period.getMonths() <= MONTHS_PERIOD)
@@ -69,7 +68,7 @@ public class ClusteringService {
 
             // Print the cluster configuration
             clusters.forEach((key, recordsList) -> {
-                System.out.println("------------------------------ CLUSTER -----------------------------------");
+//                System.out.println("------------------------------ CLUSTER -----------------------------------");
                 CentroidDTO sortedCentroid = sortedCentroid(key);
                 key.setDominantMeanMaxValue(sortedCentroid.getDominantMeanMaxValue());
                 key.setMaxDistance(sortedCentroid.getMaxDistance());
@@ -82,18 +81,18 @@ public class ClusteringService {
                     centroidCategory.setMeanValue(meanValue);
                     centroidCategoryRepository.save(centroidCategory);
                 });
-                System.out.println(key);
-                System.out.println("DominantMinMaxValue: " + key.getDominantMeanMaxValue());
-                String members = String.join(", ", recordsList
-                        .stream()
-                        .map(Record::getDescription)
-                        .collect(toSet()));
-                System.out.print(members);
-
-                System.out.println("\nMax Distance: " + key.getMaxDistance());
-
-                System.out.println();
-                System.out.println();
+//                System.out.println(key);
+//                System.out.println("DominantMinMaxValue: " + key.getDominantMeanMaxValue());
+//                String members = String.join(", ", recordsList
+//                        .stream()
+//                        .map(Record::getDescription)
+//                        .collect(toSet()));
+//                System.out.print(members);
+//
+//                System.out.println("\nMax Distance: " + key.getMaxDistance());
+//
+//                System.out.println();
+//                System.out.println();
             });
 
         }
@@ -114,35 +113,6 @@ public class ClusteringService {
         return new CentroidDTO(sorted, entries.get(0).getKey(), key.getMaxDistance());
     }
 
-//    private Notification generateNotification() {
-//        Notification notification = new Notification();
-//        notification.setId((long) 1000);
-//        notification.setText("test");
-//        Optional<User> user = userRepository.findById((long) 1230);
-//        notification.setAuthor(user.get());
-//        List<String> categories = new ArrayList<>();
-//        categories.add("PR");
-//        categories.add("Design");
-//        categories.add("FR");
-//        categories.add("HR");
-//        categories.add("IT");
-//        final int[] i = {0};
-//        int[] grades = {0, 0, 2, 5, 3};
-//        notification.setNotificationCategories(new ArrayList<>());
-//        categories.forEach(categoryName -> {
-//            Category category = categoryRepository.findByName(categoryName);
-//            if (category != null) {
-//                NotificationCategory notificationCategory = new NotificationCategory();
-//                notificationCategory.setCategory(category);
-//                notificationCategory.setNotification(notification);
-//                notificationCategory.setGrade((double) grades[i[0]]);
-//                notification.addNotificationCategory(notificationCategory);
-//            }
-//            i[0]++;
-//        });
-//        return notification;
-//    }
-
     /**
      * Performs the KNN algorithm on the given dataset for the input notification.
      *
@@ -151,7 +121,6 @@ public class ClusteringService {
      */
     public List<UserNotificationDTO> getFirstKUsersFitForNotification(Notification notification) {
         Record recordFromNotification = DatasetClusteringConverter.dataFromNotification(notification);
-        System.out.println(recordFromNotification);
         List<UserNotificationDTO> recommendedUsers = new ArrayList<>();
 
         HashMap<String, ComputedRecord> firstKUsersFitForNotification = KNN.getFirstKUsersFitForNotification
@@ -159,8 +128,13 @@ public class ClusteringService {
 
         firstKUsersFitForNotification.forEach((id, record) -> {
             Optional<User> user = userRepository.findById(Long.valueOf(id));
-            user.ifPresent(value -> recommendedUsers.add(new UserNotificationDTO(Long.valueOf(id), value.getFirstName(),
-                    value.getLastName(), record.isFit())));
+            if (user.isPresent()) {
+                UserNotificationDTO userNotificationDTO = new UserNotificationDTO(Long.valueOf(id), user.get().getFirstName(),
+                        user.get().getLastName(), record.isFit(), record.isComputed(), record.isFirstRoundRecommended());
+                Optional<Subscription> subscription = subscriptionRepository.findByUser(user.get());
+                subscription.ifPresent(value -> userNotificationDTO.setSubscriptionDTO(DTOConverter.convertSubscriptionToSubscriptionDTO(value)));
+                recommendedUsers.add(userNotificationDTO);
+            }
         });
 
         return recommendedUsers;
@@ -178,7 +152,6 @@ public class ClusteringService {
             }
             centroidDTOS.add(new CentroidDTO(coordinates, centroid.getDominantMeanMaxValue(), centroid.getMaxDistance()));
         });
-        System.out.println(centroidDTOS);
         return centroidDTOS;
     }
 }

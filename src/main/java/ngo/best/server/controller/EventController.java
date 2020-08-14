@@ -1,11 +1,10 @@
 package ngo.best.server.controller;
 
-import ngo.best.server.model.dto.CoreTeamMemberDTO;
 import ngo.best.server.model.dto.EventDTO;
 import ngo.best.server.model.entity.Event;
 import ngo.best.server.service.EventService;
+import ngo.best.server.utils.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +26,13 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Event>> findAll() {
-        return ResponseEntity.ok(eventService.findAll());
+    public ResponseEntity<List<EventDTO>> findAll() {
+        return ResponseEntity.ok(eventService.findAllEventDTO());
     }
 
     @PostMapping("/save")
     @PreAuthorize("hasRole('ROLE_MANAGEMENT')")
-    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO eventDTO) {
+    public ResponseEntity<EventDTO> saveEvent(@RequestBody EventDTO eventDTO) {
 
         Event savedEvent = eventService.save(eventDTO);
 
@@ -46,21 +45,20 @@ public class EventController {
                     .toUri();
 
             return ResponseEntity.created(uri)
-                    .body(savedEvent);
+                    .body(DTOConverter.convertEventToEventDTO(savedEvent));
         }
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_MANAGEMENT')")
     public ResponseEntity<String> deleteEvent(@PathVariable("id") Long eventId) {
-
         eventService.delete(eventId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{eventId}/coreTeam/{userId}")
     @PreAuthorize("hasRole('ROLE_MANAGEMENT') or hasRole('ROLE_MAIN_ORGANIZER')")
-    public ResponseEntity<Event> deleteCoreTeamMember(@PathVariable("eventId") Long eventId,
+    public ResponseEntity<EventDTO> deleteCoreTeamMember(@PathVariable("eventId") Long eventId,
                                                       @PathVariable("userId") Long userId) {
 
         Event updatedEvent = eventService.deleteCoreTeamMember(eventId, userId);
@@ -68,13 +66,13 @@ public class EventController {
         if(updatedEvent == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(updatedEvent);
+            return ResponseEntity.ok(DTOConverter.convertEventToEventDTO(updatedEvent));
         }
     }
 
     @PostMapping("/{eventId}/coreTeam/{userId}")
     @PreAuthorize("hasRole('ROLE_MANAGEMENT') or hasRole('ROLE_MAIN_ORGANIZER')")
-    public ResponseEntity<Event> addCoreTeamMember(@PathVariable("eventId") Long eventId,
+    public ResponseEntity<EventDTO> addCoreTeamMember(@PathVariable("eventId") Long eventId,
                                                    @PathVariable("userId") Long userId,
                                                       @RequestBody String position) {
 
@@ -83,13 +81,13 @@ public class EventController {
         if(updatedEvent == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(updatedEvent);
+            return ResponseEntity.ok(DTOConverter.convertEventToEventDTO(updatedEvent));
         }
     }
 
     @PutMapping("/{eventId}")
     @PreAuthorize("hasRole('ROLE_MANAGEMENT')")
-    public ResponseEntity<Event> updateEvent(@PathVariable("eventId") Long eventId,
+    public ResponseEntity<EventDTO> updateEvent(@PathVariable("eventId") Long eventId,
                                                  @RequestBody EventDTO eventDTO) {
 
         Event updatedEvent = eventService.updateEvent(eventId, eventDTO);
@@ -97,13 +95,13 @@ public class EventController {
         if(updatedEvent == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(updatedEvent);
+            return ResponseEntity.ok(DTOConverter.convertEventToEventDTO(updatedEvent));
         }
     }
 
     @PutMapping("/{eventId}/mainOrganizer/{userId}")
     @PreAuthorize("hasRole('ROLE_MANAGEMENT')")
-    public ResponseEntity<Event> updateMainOrganizer(@PathVariable("eventId") Long eventId,
+    public ResponseEntity<EventDTO> updateMainOrganizer(@PathVariable("eventId") Long eventId,
                                                      @PathVariable("userId") Long userId) {
 
         Event updatedEvent = eventService.updateMainOrganizer(eventId, userId);
@@ -111,7 +109,7 @@ public class EventController {
         if(updatedEvent == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(updatedEvent);
+            return ResponseEntity.ok(DTOConverter.convertEventToEventDTO(updatedEvent));
         }
     }
 }

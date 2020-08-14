@@ -2,36 +2,34 @@ package ngo.best.server.model.dto;
 
 import ngo.best.server.model.entity.Role;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * @author Ioana
  */
 
-public class UserAuthenticationDTO {
-
+public class UpdateUserDTO {
     private Long id;
     private String firstName;
     private String lastName;
     private String nickname;
     private String email;
+    private String password;
     private boolean enabled;
-    private LocalDateTime localDateTime;
     private List<Role> roles;
 
-    public UserAuthenticationDTO() {
-    }
-
-    public UserAuthenticationDTO(String firstName, String lastName, String nickname, String email, LocalDateTime localDateTime,
-                                 Boolean enabled, List<Role> roles) {
+    public UpdateUserDTO(Long id, String firstName, String lastName, String nickname, String email, String password, Boolean enabled, List<Role> roles) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.nickname = nickname;
         this.email = email;
+        this.password = password;
         this.enabled = enabled;
-        this.localDateTime = localDateTime;
         this.roles = roles;
+    }
+
+    public UpdateUserDTO() {
     }
 
     public Long getId() {
@@ -74,12 +72,12 @@ public class UserAuthenticationDTO {
         this.email = email;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isEnabled() {

@@ -1,5 +1,7 @@
 package ngo.best.server.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,12 +20,15 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "primaryKey.category", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Collection<UserCategory> userCategories = new HashSet<>();
 
     @OneToMany(mappedBy = "primaryKey.category", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Collection<DesiredUserCategory> desiredUserCategories = new HashSet<>();
 
     @OneToMany(mappedBy = "primaryKey.category", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Collection<NotificationCategory> notificationCategories = new HashSet<>();
 
     public Category() {

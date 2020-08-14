@@ -183,7 +183,6 @@ public class User {
 
     public void addDesiredUserCategory(DesiredUserCategory desiredUserCategory) { this.desiredUserCategories.add(desiredUserCategory); }
 
-
     public Collection<Event> getEventsMainOrganizer() {
         return eventsMainOrganizer;
     }

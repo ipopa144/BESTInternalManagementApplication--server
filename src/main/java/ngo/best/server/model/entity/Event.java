@@ -32,7 +32,6 @@ public class Event {
     private User mainOrganizer;
 
     @OneToMany(mappedBy = "primaryKey.event", cascade = CascadeType.ALL)
-//    @JsonIgnoreProperties("coreTeamMembers")
     private Collection<CoreTeamMember> coreTeamMembers = new HashSet<>();
 
     public Event() {}

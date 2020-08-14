@@ -33,7 +33,6 @@ public class KNN {
         HashMap<String, ComputedRecord> fitUsers = new HashMap<>(k);
         HashMap<String, ComputedRecord> recommendedUsers = new HashMap<>(k);
         List<ComputedRecord> computedRecords = new ArrayList<>();
-//        System.out.println("Features: " + notification.getFeatures());
         for (User user : users) {
             Record record = DatasetClusteringConverter.dataFromUser(user);
             double normalDistanceValue = distance.calculate(notification.getFeatures(), record.getFeatures());
@@ -62,17 +61,17 @@ public class KNN {
 
         filterUsers(fitUsers, recommendedUsers, computedRecords, maxDist);
 
-        System.out.println("----------------------------------------------------------------------------");
-
-        fitUsers.forEach((id, record) -> {
-            System.out.println(id + "-> " + record.getDistanceValue() + "isComputed: " + record.isComputed() + ", isFit: " + record.isFit());
-        });
-
-        System.out.println("----------------------------------------------------------------------------");
-
-        recommendedUsers.forEach((id, record) -> {
-            System.out.println(id + "-> isComputed: " + record.isComputed() + ", isFit: " + record.isFit());
-        });
+//        System.out.println("----------------------------------------------------------------------------");
+//
+//        fitUsers.forEach((id, record) -> {
+//            System.out.println(id + "-> " + record.getDistanceValue() + "isComputed: " + record.isComputed() + ", isFit: " + record.isFit());
+//        });
+//
+//        System.out.println("----------------------------------------------------------------------------");
+//
+//        recommendedUsers.forEach((id, record) -> {
+//            System.out.println(id + "-> isComputed: " + record.isComputed() + ", isFit: " + record.isFit());
+//        });
 
         fitUsers.putAll(recommendedUsers);
         return fitUsers;
@@ -88,19 +87,21 @@ public class KNN {
                 if (fitUsers.get(computedRecord.getRecord().getDescription()) == null) {
                     if (computedRecord.isComputed()) {
                         recommendedUsers.put(computedRecord.getRecord().getDescription(), computedRecord);
+                        computedRecord.setFirstRoundRecommended(false);
                     } else {
                         fitUsers.put(computedRecord.getRecord().getDescription(), computedRecord);
                         recommendedUsers.remove(computedRecord.getRecord().getDescription());
+                        computedRecord.setFirstRoundRecommended(true);
                     }
                 }
             } else {
-                if (recommendedUsers.size() < k - 1 && fitUsers.get(computedRecord.getRecord().getDescription()) == null)
+                if (recommendedUsers.size() < k - 1 && fitUsers.get(computedRecord.getRecord().getDescription()) == null) {
                     recommendedUsers.putIfAbsent(computedRecord.getRecord().getDescription(), computedRecord);
+                    computedRecord.setFirstRoundRecommended(false);
+                }
             }
             computedRecord.setFit(computedRecord.getDistanceValue() <= maxDist);
             computedRecords.remove(0);
         }
     }
-
-
 }

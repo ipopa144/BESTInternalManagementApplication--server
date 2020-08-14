@@ -11,10 +11,10 @@ import java.util.List;
 
 public class NotificationUsersDTO {
 
-    private Notification notification;
+    private NotificationDTO notification;
     private List<UserNotificationDTO> users;
 
-    public NotificationUsersDTO(Notification notification, List<UserNotificationDTO> users) {
+    public NotificationUsersDTO(NotificationDTO notification, List<UserNotificationDTO> users) {
         this.notification = notification;
         this.users = users;
     }
@@ -22,11 +22,11 @@ public class NotificationUsersDTO {
     public NotificationUsersDTO() {
     }
 
-    public Notification getNotification() {
+    public NotificationDTO getNotification() {
         return notification;
     }
 
-    public void setNotification(Notification notification) {
+    public void setNotification(NotificationDTO notification) {
         this.notification = notification;
     }
 

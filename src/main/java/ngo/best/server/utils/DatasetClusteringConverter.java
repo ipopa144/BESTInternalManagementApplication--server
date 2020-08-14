@@ -40,7 +40,7 @@ public class DatasetClusteringConverter {
         Map<String, Double> tags = new HashMap<>();
         System.out.println("Notif: " + notification.getNotificationCategories().size());
         notification.getNotificationCategories().forEach(notificationCategory -> {
-            System.out.println("Notif: " + notificationCategory);
+            System.out.println("Notif category: " + notificationCategory);
             tags.put(notificationCategory.getCategory().getName(), notificationCategory.getGrade());
         });
 

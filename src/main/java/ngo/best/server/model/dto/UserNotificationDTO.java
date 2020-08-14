@@ -12,13 +12,19 @@ public class UserNotificationDTO {
     private Long id;
     private String firstName;
     private String lastName;
-    private Boolean isFit;
+    private Boolean fit;
+    private Boolean firstRoundRecommended;
+    private Boolean computed;
+    private SubscriptionDTO subscriptionDTO;
 
-    public UserNotificationDTO(Long id, String firstName, String lastName, Boolean isFit) {
+    public UserNotificationDTO(Long id, String firstName, String lastName, Boolean fit, Boolean computed,
+                               Boolean firstRoundRecommended) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.isFit = isFit;
+        this.fit = fit;
+        this.firstRoundRecommended = firstRoundRecommended;
+        this.computed = computed;
     }
 
     public UserNotificationDTO() {
@@ -49,10 +55,34 @@ public class UserNotificationDTO {
     }
 
     public Boolean getFit() {
-        return isFit;
+        return fit;
     }
 
     public void setFit(Boolean fit) {
-        isFit = fit;
+        this.fit = fit;
+    }
+
+    public Boolean getComputed() {
+        return computed;
+    }
+
+    public void setComputed(Boolean computed) {
+        this.computed = computed;
+    }
+
+    public Boolean getFirstRoundRecommended() {
+        return firstRoundRecommended;
+    }
+
+    public void setFirstRoundRecommended(Boolean firstRoundRecommended) {
+        this.firstRoundRecommended = firstRoundRecommended;
+    }
+
+    public SubscriptionDTO getSubscriptionDTO() {
+        return subscriptionDTO;
+    }
+
+    public void setSubscriptionDTO(SubscriptionDTO subscriptionDTO) {
+        this.subscriptionDTO = subscriptionDTO;
     }
 }

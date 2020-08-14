@@ -3,7 +3,6 @@ package ngo.best.server.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 /**
  * @author Ioana
@@ -15,13 +14,14 @@ import java.time.LocalDateTime;
                 joinColumns = @JoinColumn(name = "notification_id")),
         @AssociationOverride(name = "primaryKey.category",
                 joinColumns = @JoinColumn(name = "category_id")) })
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "primaryKey")
 public class NotificationCategory {
 
     private NotificationCategoryId primaryKey = new NotificationCategoryId();
 
     private Double grade;
-
-    public NotificationCategory() {}
 
     @EmbeddedId
     @JsonIgnore

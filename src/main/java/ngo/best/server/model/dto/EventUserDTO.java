@@ -1,24 +1,21 @@
 package ngo.best.server.model.dto;
 
-import java.util.List;
-
 /**
  * @author Ioana
  */
 
-public class EventDTO {
+public class EventUserDTO {
 
     private Long id;
     private String name;
     private int firstYear;
     private String description;
-    private UpdateUserDTO mainOrganizer;
-    private List<CoreTeamMemberDTO> coreTeamMembers;
 
-    public EventDTO() {
+    public EventUserDTO() {
     }
 
-    public EventDTO(String name, int firstYear, String description) {
+    public EventUserDTO(Long id, String name, int firstYear, String description) {
+        this.id = id;
         this.name = name;
         this.firstYear = firstYear;
         this.description = description;
@@ -54,21 +51,5 @@ public class EventDTO {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public UpdateUserDTO getMainOrganizer() {
-        return mainOrganizer;
-    }
-
-    public void setMainOrganizer(UpdateUserDTO mainOrganizer) {
-        this.mainOrganizer = mainOrganizer;
-    }
-
-    public List<CoreTeamMemberDTO> getCoreTeamMembers() {
-        return coreTeamMembers;
-    }
-
-    public void setCoreTeamMembers(List<CoreTeamMemberDTO> coreTeamMembers) {
-        this.coreTeamMembers = coreTeamMembers;
     }
 }

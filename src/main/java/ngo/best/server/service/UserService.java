@@ -3,13 +3,16 @@ package ngo.best.server.service;
 import ngo.best.server.clustering.kmeans.CentroidDTO;
 import ngo.best.server.clustering.kmeans.Record;
 import ngo.best.server.config.JwtTokenUtil;
+import ngo.best.server.model.dto.UpdateUserDTO;
 import ngo.best.server.model.dto.UserDTO;
 import ngo.best.server.model.entity.Category;
 import ngo.best.server.model.entity.User;
 import ngo.best.server.model.entity.UserCategory;
 import ngo.best.server.repository.*;
+import ngo.best.server.utils.DTOConverter;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,9 +47,23 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+    
+    public List<UserDTO> findAllUserDTO() {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User user : this.findAll()) {
+            userDTOS.add(DTOConverter.convertUserToUserDTO(user));
+        }
+        return userDTOS;
+    }
 
     public List<User> findAllByLastName(String lastName) {
         return userRepository.findAllByLastName(lastName);
+    }
+
+    public List<UserDTO> findAllByLastNameDTO(String lastName) {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        userRepository.findAllByLastName(lastName).forEach(user -> userDTOS.add(DTOConverter.convertUserToUserDTO(user)));
+        return userDTOS;
     }
 
     public User identifyUser(String token) {
@@ -54,7 +71,7 @@ public class UserService {
         return findByEmail(jwtTokenUtil.getEmailFromToken(splitResult[1]));
     }
 
-    public User updateUser(Long userID, UserDTO userDTO) {
+    public User updateUser(Long userID, UpdateUserDTO userDTO) {
         final Optional<User> user = userRepository.findById(userID);
         if(user.isPresent()) {
             user.get().setFirstName(userDTO.getFirstName());

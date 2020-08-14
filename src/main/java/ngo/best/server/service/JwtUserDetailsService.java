@@ -3,7 +3,6 @@ package ngo.best.server.service;
 import ngo.best.server.model.dto.NewUserDTO;
 import ngo.best.server.model.entity.Role;
 import ngo.best.server.model.entity.User;
-import ngo.best.server.model.dto.UserDTO;
 import ngo.best.server.repository.RoleRepository;
 import ngo.best.server.repository.UserRepository;
 import ngo.best.server.utils.DTOConverter;

@@ -8,6 +8,7 @@ import ngo.best.server.repository.UserRepository;
 import ngo.best.server.utils.DTOConverter;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,14 @@ public class EventService {
     }
 
     public List<Event> findAll() { return eventRepository.findAll(); }
+
+    public List<EventDTO> findAllEventDTO() {
+        List<EventDTO> eventDTOS = new ArrayList<>();
+        for (Event event : eventRepository.findAll()) {
+            eventDTOS.add(DTOConverter.convertEventToEventDTO(event));
+        }
+        return eventDTOS;
+    }
 
     public Event findById(Long id) {
         Optional<Event> event = eventRepository.findById(id);

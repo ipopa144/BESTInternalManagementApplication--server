@@ -8,6 +8,7 @@ public class ComputedRecord {
     private Record record;
     private boolean isComputed;
     private boolean isFit;
+    private boolean firstRoundRecommended;
     private double distanceValue;
 
     public ComputedRecord(Record record, boolean isComputed, double distanceValue) {
@@ -46,5 +47,13 @@ public class ComputedRecord {
 
     public void setFit(boolean fit) {
         isFit = fit;
+    }
+
+    public boolean isFirstRoundRecommended() {
+        return firstRoundRecommended;
+    }
+
+    public void setFirstRoundRecommended(boolean firstRoundRecommended) {
+        this.firstRoundRecommended = firstRoundRecommended;
     }
 }
