@@ -52,8 +52,9 @@ public class JwtAuthenticationController {
             UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(jwtRequest.getEmail());
             String token = jwtTokenUtil.generateToken(userDetails);
             User user = userService.findByEmail(jwtRequest.getEmail());
+            Boolean isUserSubscribed = user.getSubscription() != null;
             UserAuthenticationDTO userAuthenticationDTO = DTOConverter.convertUserToUserAuthenticationDTO(user);
-            return ResponseEntity.ok(new JwtResponse(userAuthenticationDTO, token));
+            return ResponseEntity.ok(new JwtResponse(userAuthenticationDTO, token, isUserSubscribed));
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("USERNAME_NOT_FOUND");
         }

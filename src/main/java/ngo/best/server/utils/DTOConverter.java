@@ -123,6 +123,13 @@ public class DTOConverter {
         return category;
     }
 
+    public static CategoryDTO convertCategoryToCategoryDTO(Category category) {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setId(category.getId());
+        categoryDTO.setName(category.getName());
+        return categoryDTO;
+    }
+
     public static Role convertRoleDTOToRole(RoleDTO roleDTO) {
         Role role = new Role();
         role.setName(roleDTO.getName());
@@ -182,6 +189,7 @@ public class DTOConverter {
         notificationDTO.setId(notification.getId());
         notificationDTO.setAuthor(DTOConverter.convertUserToUpdateUserDTO(notification.getAuthor()));
         notificationDTO.setText(notification.getText());
+        notificationDTO.setTitle(notification.getTitle());
         List<NotificationCategoryDTO> notificationCategoryDTOS = new ArrayList<>();
         notification.getNotificationCategories().forEach(notificationCategory ->
                 notificationCategoryDTOS.add(DTOConverter.convertNotificationCategoryToNotificationCategoryDTO

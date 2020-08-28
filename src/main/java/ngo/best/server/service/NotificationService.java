@@ -47,6 +47,7 @@ public class NotificationService {
     public Notification save(NotificationRequestDTO notificationDTO, User author) {
         Notification notification = new Notification();
         notification.setText(notificationDTO.getText());
+        notification.setTitle(notificationDTO.getTitle());
         if (author != null) {
             notification.setAuthor(author);
             notification = notificationRepository.save(notification);
@@ -84,7 +85,8 @@ public class NotificationService {
      * @return Final list of selected users
      */
     public List<UserNotificationDTO> getSelectedUsersForNotification(Notification notification) {
-        Optional<Notification> foundNotification = notificationRepository.findById((long) 1530);
+
+        Optional<Notification> foundNotification = notificationRepository.findById((long) 1537);
         return foundNotification.map(clusteringService::getFirstKUsersFitForNotification).orElse(null);
     }
 

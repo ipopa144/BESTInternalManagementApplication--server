@@ -11,7 +11,6 @@ import ngo.best.server.utils.DTOConverter;
 import ngo.best.server.utils.DatasetClusteringConverter;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.*;
@@ -45,8 +44,8 @@ public class ClusteringService {
     }
 
     /**
-     * Generates the clusters for the given dataset and computes the mean max
-     * distance for each of them
+     * Stores the generated clusters in the database for the given dataset
+     * along with each computed mean max distance
      *
      * @param users The dataset.
      */
@@ -117,9 +116,10 @@ public class ClusteringService {
      * Performs the KNN algorithm on the given dataset for the input notification.
      *
      * @param notification   The notification.
-     * @return Final list of selected users.
+     * @return Final list of selected users along with their subscriptions.
      */
     public List<UserNotificationDTO> getFirstKUsersFitForNotification(Notification notification) {
+
         Record recordFromNotification = DatasetClusteringConverter.dataFromNotification(notification);
         List<UserNotificationDTO> recommendedUsers = new ArrayList<>();
 

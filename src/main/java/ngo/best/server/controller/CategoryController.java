@@ -3,6 +3,7 @@ package ngo.best.server.controller;
 import ngo.best.server.model.dto.CategoryDTO;
 import ngo.best.server.model.entity.Category;
 import ngo.best.server.service.CategoryService;
+import ngo.best.server.utils.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class CategoryController {
 
     @PostMapping("/save")
     @PreAuthorize("hasRole('ROLE_MANAGEMENT')")
-    public ResponseEntity<Category> saveCategory(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> saveCategory(@RequestBody CategoryDTO categoryDTO) {
 
         Category savedCategory = categoryService.save(categoryDTO);
 
@@ -45,7 +46,7 @@ public class CategoryController {
                     .toUri();
 
             return ResponseEntity.created(uri)
-                    .body(savedCategory);
+                    .body(DTOConverter.convertCategoryToCategoryDTO(savedCategory));
         }
     }
 

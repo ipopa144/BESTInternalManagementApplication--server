@@ -9,12 +9,15 @@ import java.util.Map;
 public class NotificationRequestDTO {
     private String text;
 
+    private String title;
+
     private Map<String, Double> notificationCategories;
 
     public NotificationRequestDTO() {}
 
-    public NotificationRequestDTO(String text, Map<String, Double> notificationCategories) {
+    public NotificationRequestDTO(String text, String title, Map<String, Double> notificationCategories) {
         this.text = text;
+        this.title = title;
         this.notificationCategories = notificationCategories;
     }
 
@@ -32,5 +35,13 @@ public class NotificationRequestDTO {
 
     public void setNotificationCategories(Map<String, Double> notificationCategories) {
         this.notificationCategories = notificationCategories;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

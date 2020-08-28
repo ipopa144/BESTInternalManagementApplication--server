@@ -13,15 +13,18 @@ public class NotificationDTO {
 
     private String text;
 
+    private String title;
+
     private List<NotificationCategoryDTO> notificationCategories;
 
     private UpdateUserDTO author;
 
     public NotificationDTO() {}
 
-    public NotificationDTO(Long id, String text, List<NotificationCategoryDTO> notificationCategories, UpdateUserDTO author) {
+    public NotificationDTO(Long id, String text, String title, List<NotificationCategoryDTO> notificationCategories, UpdateUserDTO author) {
         this.id = id;
         this.text = text;
+        this.title = title;
         this.notificationCategories = notificationCategories;
         this.author = author;
     }
@@ -40,6 +43,14 @@ public class NotificationDTO {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public List<NotificationCategoryDTO> getNotificationCategories() {

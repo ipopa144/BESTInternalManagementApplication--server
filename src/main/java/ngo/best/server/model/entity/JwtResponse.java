@@ -12,13 +12,15 @@ import java.util.List;
 public class JwtResponse {
     private UserAuthenticationDTO user;
     private String jwtToken;
+    private Boolean subscribed;
 
     public JwtResponse() {
     }
 
-    public JwtResponse(UserAuthenticationDTO user, String jwtToken) {
+    public JwtResponse(UserAuthenticationDTO user, String jwtToken, Boolean subscribed) {
         this.user = user;
         this.jwtToken = jwtToken;
+        this.subscribed = subscribed;
     }
 
     public UserAuthenticationDTO getUser() {
@@ -27,5 +29,9 @@ public class JwtResponse {
 
     public String getJwtToken() {
         return jwtToken;
+    }
+
+    public Boolean getSubscribed() {
+        return subscribed;
     }
 }

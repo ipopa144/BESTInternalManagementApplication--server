@@ -6,12 +6,13 @@ package ngo.best.server.model.dto;
 
 public class CategoryDTO {
 
+    private Long id;
     private String name;
 
     public CategoryDTO() {
     }
 
-    public CategoryDTO(String name) {
+    public CategoryDTO(Long id, String name) {
         this.name = name;
     }
 
@@ -21,5 +22,13 @@ public class CategoryDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

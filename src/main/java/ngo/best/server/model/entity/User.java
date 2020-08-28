@@ -199,6 +199,14 @@ public class User {
         this.notifications = notifications;
     }
 
+    public Subscription getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(Subscription subscription) {
+        this.subscription = subscription;
+    }
+
     @Override
     public String toString() {
         return "User{" +
