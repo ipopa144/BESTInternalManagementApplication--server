@@ -44,8 +44,9 @@ public class ClusteringService {
     }
 
     /**
-     * Stores the generated clusters in the database for the given dataset
-     * along with each computed mean max distance
+     * If the centroids stored in the database are outdated,
+     * it generates new clusters and overwrites them in the database
+     * for the given dataset along with each computed mean max distance
      *
      * @param users The dataset.
      */

@@ -7,6 +7,7 @@ import ngo.best.server.model.entity.*;
 import ngo.best.server.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,7 @@ public class NotificationService {
      * @return The saved notification.
      */
     public Notification save(NotificationRequestDTO notificationDTO, User author) {
+
         Notification notification = new Notification();
         notification.setText(notificationDTO.getText());
         notification.setTitle(notificationDTO.getTitle());
@@ -54,6 +56,7 @@ public class NotificationService {
         }
         Optional<Notification> optionalNotification = notificationRepository.findById(notification.getId());
         if(optionalNotification.isPresent()) {
+            List<NotificationCategory> notificationCategories = new ArrayList<>();
             notificationDTO.getNotificationCategories().forEach((categoryName, grade) -> {
                 Category category = categoryRepository.findByName(categoryName);
                 if (category != null) {
@@ -61,9 +64,11 @@ public class NotificationService {
                     notificationCategory.setCategory(category);
                     notificationCategory.setNotification(optionalNotification.get());
                     notificationCategory.setGrade(grade);
-                    notificationCategoryRepository.save(notificationCategory);
+                    NotificationCategory savedNotificationCategory = notificationCategoryRepository.save(notificationCategory);
+                    notificationCategories.add(savedNotificationCategory);
                 }
             });
+            notification.setNotificationCategories(notificationCategories);
             return notification;
         }
         return null;
@@ -80,13 +85,13 @@ public class NotificationService {
 
     /**
      * Generates the selected users for the input notification
+     * and returns a list of them along with their subscriptions.
      *
      * @param notification  The dataset.
      * @return Final list of selected users
      */
     public List<UserNotificationDTO> getSelectedUsersForNotification(Notification notification) {
-
-        Optional<Notification> foundNotification = notificationRepository.findById((long) 1537);
+        Optional<Notification> foundNotification = notificationRepository.findById(notification.getId());
         return foundNotification.map(clusteringService::getFirstKUsersFitForNotification).orElse(null);
     }
 

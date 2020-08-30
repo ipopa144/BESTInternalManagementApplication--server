@@ -1,6 +1,5 @@
 package ngo.best.server.controller;
 
-import ngo.best.server.model.dto.NotificationDTO;
 import ngo.best.server.model.dto.NotificationRequestDTO;
 import ngo.best.server.model.dto.NotificationUsersDTO;
 import ngo.best.server.model.dto.UserNotificationDTO;

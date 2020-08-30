@@ -22,6 +22,7 @@ public class KNN {
      *
      * @param centroids     The centroids.
      * @param distance      To calculate the distance between two items.
+     * @param notification  The notification along with its requirements
      * @param maxDist       Upper bound for the number of fit users.
      * @param users         The dataset.
      * @return  Final list of selected userDTOs which contains booleans set accordingly about their fitness

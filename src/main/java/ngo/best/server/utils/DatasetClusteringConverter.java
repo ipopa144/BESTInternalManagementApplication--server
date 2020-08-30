@@ -38,9 +38,7 @@ public class DatasetClusteringConverter {
 
     public static Record dataFromNotification(Notification notification) {
         Map<String, Double> tags = new HashMap<>();
-        System.out.println("Notif: " + notification.getNotificationCategories().size());
         notification.getNotificationCategories().forEach(notificationCategory -> {
-            System.out.println("Notif category: " + notificationCategory);
             tags.put(notificationCategory.getCategory().getName(), notificationCategory.getGrade());
         });
 
